@@ -1,0 +1,12 @@
+services:
+  frontend:
+    image: syslogng-docker:latest
+    container_name: syslogng-docker
+    volumes:
+      - etc:/opt/syslog-ng/etc
+      - scl:/opt/syslog-ng/share/syslog-ng/include/scl
+      - tmp:/tmp
+volumes:
+  etc:
+  scl:
+  tmp:
