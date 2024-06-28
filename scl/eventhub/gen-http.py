@@ -279,7 +279,7 @@ for configuration in parser.sections():
 
         # Check if local log path should be enabled for source
         local_log = False
-        if "local_log" in parser[configuration]:
+        if "local_log" in parser[configuration] and not running_in_container:
             if parser[configuration]['local_log'].lower() == "true":
                 local_log = True
 
