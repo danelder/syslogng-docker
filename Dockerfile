@@ -7,10 +7,10 @@ RUN yum --disableplugin=subscription-manager clean all
 # Install python dependencies for driver
 RUN yum install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
 
-ARG VERSION=unknown
+ARG VERSION=20240628
 
 # Copy install package
-COPY syslog-ng-rhel9.rpm /root/syslog-ng.rpm
+RUN curl -o /root/syslog-ng.rpm -L "https://www.dropbox.com/scl/fi/b9atj7f0ul5j1fiy1aotf/syslog-ng-premium-edition-compact-7.0.34-1.rhel9.x86_64.rpm?rlkey=2kcoomhi3d5jmllfq8trrbmgo&st=gktoqzoc&dl=0"
 
 # Install syslog-ng
 RUN yum install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
