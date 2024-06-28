@@ -1,0 +1,25 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+  imageName: syslogng
+
+pool: 
+  name: lab
+
+
+steps:
+- task: Docker@1
+  displayName: Build an image
+  inputs:
+    command: Build an image
+    dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+    arguments: '-t $(imageName)'
