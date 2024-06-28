@@ -4,7 +4,7 @@ FROM registry.access.redhat.com/ubi9/ubi:latest
 # Upgrade system
 RUN yum --disableplugin=subscription-manager clean all
 
-# Install python dependencies for driver
+# Install python dependency for driver
 RUN yum install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
 
 ARG VERSION=unknown

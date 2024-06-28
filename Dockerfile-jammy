@@ -1,19 +1,19 @@
-# Redhat 9
-FROM registry.access.redhat.com/ubi9/ubi:latest
+# Ubuntu Jammy
+FROM ubuntu:jammy
 
 # Upgrade system
-RUN yum --disableplugin=subscription-manager clean all
+RUN apt-get update && apt-get upgrade -y
 
-# Install python dependencies for driver
-RUN yum install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
+# Install python dependency for driver
+RUN apt install -y python3-netifaces
 
 ARG VERSION=unknown
 
 # Copy install package
-COPY syslog-ng-rhel9.rpm /root/syslog-ng.rpm
+COPY syslog-ng-jammy.deb /root/syslog-ng.deb
 
 # Install syslog-ng
-RUN yum install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
+RUN yes | dpkg -i /root/syslog-ng.deb
 
 # Cache volume for disk buffer and debug output
 VOLUME [ "/tmp" ]
