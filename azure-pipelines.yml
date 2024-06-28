@@ -16,6 +16,9 @@ pool:
   name: lab
 
 steps:
+- task: CmdLine@2
+  inputs:
+    script: 'echo $(eventhub-auth-token) > eventhub-auth-token'
 - task: Docker@1
   displayName: Build an image
   inputs:
