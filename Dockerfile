@@ -10,7 +10,7 @@ RUN yum install --disableplugin=subscription-manager -y python3-netifaces libnsl
 ARG VERSION=20240624
 
 # Copy install package
-COPY syslog-ng-rhel8.rpm /root/syslog-ng.rpm
+COPY syslog-ng-premium-edition-compact-7.0.34-1.rhel9.x86_64.rpm /root/syslog-ng.rpm
 
 # Install syslog-ng
 RUN yum install --disableplugin=subscription-manager -y /root/syslog-ng.rpm

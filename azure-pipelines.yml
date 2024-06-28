@@ -15,7 +15,6 @@ variables:
 pool: 
   name: lab
 
-
 steps:
 - task: Docker@1
   displayName: Build an image

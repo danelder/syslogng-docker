@@ -1,0 +1,6 @@
+syslog-ng-rhel8.rpm
+syslog-ng-rhel9.rpm
+syslog-ng.deb
+etc/cert.d/delder.theelderfamily.org.crt
+etc/cert.d/delder.theelderfamily.org.key
+etc/conf.d/eventhub-auth
