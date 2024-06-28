@@ -1,5 +1,5 @@
-# Redhat 8 
-FROM registry.access.redhat.com/ubi8/ubi:latest
+# Redhat 8
+FROM --platform=linux/amd64 registry.access.redhat.com/ubi8/ubi:latest
 
 # Upgrade system
 RUN yum --disableplugin=subscription-manager clean all
@@ -10,7 +10,7 @@ RUN yum install --disableplugin=subscription-manager -y python3-netifaces libnsl
 ARG VERSION=20240624
 
 # Copy install package
-COPY syslog-ng-premium-edition-compact-7.0.34-1.rhel9.x86_64.rpm /root/syslog-ng.rpm
+COPY syslog-ng-rhel8.rpm /root/syslog-ng.rpm
 
 # Install syslog-ng
 RUN yum install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
