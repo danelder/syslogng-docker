@@ -16,9 +16,25 @@ pool:
   name: lab
 
 steps:
+
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'syslogng-pipeline-secrets'
+    KeyVaultName: 'syslogng-keyvault'
+    SecretsFilter: '*'
+    RunAsPreJob: true
 - task: CmdLine@2
   inputs:
     script: 'echo $(eventhub-auth-token) > eventhub-auth-token'
+- task: CopyFiles@2
+  inputs:
+    Contents: 'eventhub-auth-token'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
 - task: Docker@1
   displayName: Build an image
   inputs:
