@@ -29,13 +29,13 @@ steps:
     script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
 - task: CmdLine@2
   inputs:
-    script: 'echo $(certificate) > $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
-- task: CmdLine@2
-  inputs:
-    script: 'echo $(key) > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
-- task: CmdLine@2
-  inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
+- task: CmdLine@2
+  inputs:
+    script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
+- task: CmdLine@2
+  inputs:
+    script: 'openssl storeutl -certs $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
 - task: Docker@1
   displayName: Build an image
   inputs:
