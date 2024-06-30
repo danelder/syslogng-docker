@@ -25,7 +25,7 @@ steps:
     RunAsPreJob: true
 - task: CmdLine@2
   inputs:
-    script: 'echo $(eventhub-auth-token) > eventhub-auth-token'
+    script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
 - task: CopyFiles@2
   inputs:
     Contents: 'eventhub-auth-token'
