@@ -23,18 +23,16 @@ steps:
     KeyVaultName: 'syslogng-keyvault'
     SecretsFilter: '*'
     RunAsPreJob: true
+
 - task: CmdLine@2
   inputs:
     script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
-- task: CopyFiles@2
+- task: CmdLine@2
   inputs:
-    Contents: 'eventhub-auth-token'
-    TargetFolder: '$(build.artifactstagingdirectory)'
-- task: PublishBuildArtifacts@1
+    script: 'echo $(certificate) > $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
+- task: CmdLine@2
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    script: 'echo $(key) > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
 - task: Docker@1
   displayName: Build an image
   inputs:
