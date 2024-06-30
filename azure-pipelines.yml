@@ -32,10 +32,10 @@ steps:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 - task: CmdLine@2
   inputs:
-    script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
+    script: 'openssl storeutl -certs $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
 - task: CmdLine@2
   inputs:
-    script: 'openssl storeutl -certs $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
+    script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
 - task: Docker@1
   displayName: Build an image
   inputs:
