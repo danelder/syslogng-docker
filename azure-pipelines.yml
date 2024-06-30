@@ -35,7 +35,7 @@ steps:
     script: 'echo $(key) > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
 - task: CmdLine@2
   inputs:
-    script: 'echo $(syslogng-theelderfamily-org) > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
+    script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 - task: Docker@1
   displayName: Build an image
   inputs:
