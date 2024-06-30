@@ -32,7 +32,7 @@ steps:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 - task: CmdLine@2
   inputs:
-    script: 'openssl storeutl -certs $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
+    script: 'openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
 - task: CmdLine@2
   inputs:
     script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
