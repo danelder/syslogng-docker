@@ -24,21 +24,36 @@ steps:
     SecretsFilter: '*'
     RunAsPreJob: true
 
+#- bash: |
+#    curl -o $(Build.SourcesDirectory)/syslog-ng.rpm -L $RPM
+#  env:
+#    RPM: $(RPM)
+
+#- task: CmdLine@2
+#  inputs:
+#    script: 'curl -o $(Build.SourcesDirectory)/syslog-ng.rpm -L $(RPM)'
+
 - task: CmdLine@2
   inputs:
     script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
+
 - task: CmdLine@2
   inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
+
 - task: CmdLine@2
   inputs:
     script: 'openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
+
 - task: CmdLine@2
   inputs:
     script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
+
 - task: Docker@1
   displayName: Build an image
   inputs:
     command: Build an image
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName)'
+    arguments: '-t $(imageName) --build-arg RPM=$(RPM)'
+  env:
+    RPM: $(RPM)
