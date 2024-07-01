@@ -55,5 +55,3 @@ steps:
     command: Build an image
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     arguments: '-t $(imageName)'
-  env:
-    RPM: $(RPM)
