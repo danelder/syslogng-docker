@@ -6,6 +6,4 @@ services:
     volumes:
       - tmp:/tmp
 volumes:
-  etc:
-  scl:
   tmp:
