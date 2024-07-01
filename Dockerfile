@@ -10,8 +10,7 @@ RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl
 ARG VERSION=20240701
 
 # Copy install package
-RUN echo "${RPM}"
-RUN curl -o /root/syslog-ng.rpm -L "${RPM}"
+RUN curl -o /root/syslog-ng.rpm -L $RPM
 
 # Install syslog-ng
 RUN dnf install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
