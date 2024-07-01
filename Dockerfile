@@ -7,10 +7,11 @@ RUN dnf --disableplugin=subscription-manager clean all
 # Install python dependencies for driver
 RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
 
-ARG VERSION=20240628
+ARG VERSION=20240701
 
 # Copy install package
-RUN curl -o /root/syslog-ng.rpm -L "https://www.dropbox.com/scl/fi/b9atj7f0ul5j1fiy1aotf/syslog-ng-premium-edition-compact-7.0.34-1.rhel9.x86_64.rpm?rlkey=2kcoomhi3d5jmllfq8trrbmgo&st=gktoqzoc&dl=0"
+RUN echo "${RPM}"
+RUN curl -o /root/syslog-ng.rpm -L "${RPM}"
 
 # Install syslog-ng
 RUN dnf install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
