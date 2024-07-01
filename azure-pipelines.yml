@@ -29,9 +29,9 @@ steps:
 #  env:
 #    RPM: $(RPM)
 
-- task: CmdLine@2
-  inputs:
-    script: 'curl -o $(Build.SourcesDirectory)/syslog-ng.rpm -L $(RPM)'
+#- task: CmdLine@2
+#  inputs:
+#    script: 'curl -o $(Build.SourcesDirectory)/syslog-ng.rpm -L $(RPM)'
 
 - task: CmdLine@2
   inputs:
