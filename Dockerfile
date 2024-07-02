@@ -7,27 +7,17 @@ RUN dnf --disableplugin=subscription-manager clean all
 # Install python dependencies for driver
 RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
 
-ARG VERSION=20240701
+ARG VERSION=20240702
 
 # Get RPM path from environment
 ARG RPM
 ENV RPM_PATH=${RPM}
 
-# Copy install package
-#RUN curl -o /root/syslog-ng.rpm -L $RPM_PATH
-
 # Install syslog-ng
-#RUN dnf install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
 RUN rpm -Uvh ${RPM_PATH}
-
-# Cleanup RPM
-#RUN rm /root/syslog-ng.rpm
 
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
-
-# Always force latest configuration
-#ARG CACHEBUST=1
 
 # Copy syslog-ng configuration
 COPY etc/ /opt/syslog-ng/etc/
