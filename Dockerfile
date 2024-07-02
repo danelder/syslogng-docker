@@ -19,6 +19,9 @@ RUN curl -o /root/syslog-ng.rpm -L $RPM_PATH
 # Install syslog-ng
 RUN dnf install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
 
+# Cleanup RPM
+RUN rm /root/syslog-ng.rpm
+
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
 
