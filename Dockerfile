@@ -14,13 +14,14 @@ ARG RPM
 ENV RPM_PATH=${RPM}
 
 # Copy install package
-RUN curl -o /root/syslog-ng.rpm -L $RPM_PATH
+#RUN curl -o /root/syslog-ng.rpm -L $RPM_PATH
 
 # Install syslog-ng
-RUN dnf install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
+#RUN dnf install --disableplugin=subscription-manager -y /root/syslog-ng.rpm
+RUN rpm -Uvh ${RPM_PATH}
 
 # Cleanup RPM
-RUN rm /root/syslog-ng.rpm
+#RUN rm /root/syslog-ng.rpm
 
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
