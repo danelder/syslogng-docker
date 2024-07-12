@@ -51,8 +51,4 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: 'docker tag syslogng localhost:8080/admin/syslogng/latest'
-
-- task: CmdLine@2
-  inputs:
     script: 'docker push localhost:8080/admin/syslogng/latest'
