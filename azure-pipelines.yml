@@ -45,7 +45,7 @@ steps:
   inputs:
     command: Build an image
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName) --build-arg RPM=$(RPM)'
+    arguments: '-t $(imageName):$(Build.BuildId) --build-arg RPM=$(RPM)'
   env:
     RPM: $(RPM)
 
