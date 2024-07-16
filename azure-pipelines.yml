@@ -30,6 +30,10 @@ steps:
 
 - task: CmdLine@2
   inputs:
+    script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
+
+- task: CmdLine@2
+  inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
 - task: CmdLine@2
@@ -49,6 +53,6 @@ steps:
   env:
     RPM: $(RPM)
 
-- task: CmdLine@2
-  inputs:
-    script: 'docker push localhost:8080/admin/syslogng/latest'
+#- task: CmdLine@2
+#  inputs:
+#    script: 'docker push localhost:8080/admin/syslogng/latest'
