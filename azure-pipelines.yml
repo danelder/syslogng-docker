@@ -30,6 +30,10 @@ steps:
 
 - task: CmdLine@2
   inputs:
+    script: 'echo $(license) > $(Build.SourcesDirectory)/etc/license.txt'
+
+- task: CmdLine@2
+  inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
 - task: CmdLine@2
