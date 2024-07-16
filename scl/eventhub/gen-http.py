@@ -131,6 +131,10 @@ if not running_in_container:
         if address is not False:
             global_address = address
             break
+# If we are running in a container, ensure confgen_local_log_path is set to /tmp
+else:
+    if confgen_local_log_path != "":
+        confgen_local_log_path = "/tmp"
 
 # Utilize ini style configuration files
 parser = configparser.ConfigParser()
@@ -279,7 +283,7 @@ for configuration in parser.sections():
 
         # Check if local log path should be enabled for source
         local_log = False
-        if "local_log" in parser[configuration] and not running_in_container:
+        if "local_log" in parser[configuration]:
             if parser[configuration]['local_log'].lower() == "true":
                 local_log = True
 
