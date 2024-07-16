@@ -30,7 +30,7 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: 'echo $(license) > $(Build.SourcesDirectory)/etc/license.txt'
+    script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
 
 - task: CmdLine@2
   inputs:
