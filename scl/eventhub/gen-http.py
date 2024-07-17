@@ -88,7 +88,7 @@ confgen_mem_buf = sanitize(os.environ.get('confgen_mem_buf', "10000"))
 confgen_disk_buf = sanitize(os.environ.get('confgen_disk_buf', "10485760"))
 confgen_disk_dir = sanitize(os.environ.get('confgen_disk_dir', "/tmp"))
 confgen_local_log_path = sanitize(os.environ.get('confgen_local_log_path', ""))
-confgen_container = sanitize(os.environ.get('confgen_container', "false"))
+confgen_container = sanitize(os.environ.get('confgen_container', ""))
 
 # Diagnostic output if needed
 if args.debug:
@@ -118,6 +118,7 @@ body_formats = {}
 destinations = ""
 
 # Determine if we're running in a container
+running_in_container = False
 if confgen_container == "true":
     running_in_container = True
 
