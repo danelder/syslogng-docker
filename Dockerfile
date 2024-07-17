@@ -14,7 +14,7 @@ ARG RPM
 ENV RPM_PATH=${RPM}
 
 # Set environment variable for running in a container
-ENV confgen_container = true
+ENV confgen_container=true
 
 # Install syslog-ng
 RUN rpm -Uvh ${RPM_PATH}
