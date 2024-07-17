@@ -45,7 +45,8 @@ steps:
     script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
 
 - task: Bash@3
-  displayName: Build Docker Image for DemoWeb
+  displayName: Build Container Image for syslogng-docker
+  timeoutInMinutes: 5
   inputs:
     targetType: inline
     script: |
