@@ -13,6 +13,9 @@ ARG VERSION=20240702
 ARG RPM
 ENV RPM_PATH=${RPM}
 
+# Set environment variable for running in a container
+ENV confgen_container=true
+
 # Install syslog-ng
 RUN rpm -Uvh ${RPM_PATH}
 
@@ -26,4 +29,4 @@ COPY etc/ /opt/syslog-ng/etc/
 COPY scl/ /opt/syslog-ng/share/syslog-ng/include/scl/
 
 # Startup syslog-ng
-ENTRYPOINT /opt/syslog-ng/sbin/syslog-ng -F --no-caps -v -e --persist-file=/tmp/syslog-ng.persist --pidfile=/tmp/syslog-ng.pid --control=/tmp/syslog-ng.ctl
+ENTRYPOINT confgen_container=true /opt/syslog-ng/sbin/syslog-ng -F --no-caps -v -e --persist-file=/tmp/syslog-ng.persist --pidfile=/tmp/syslog-ng.pid --control=/tmp/syslog-ng.ctl
