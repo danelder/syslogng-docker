@@ -88,6 +88,7 @@ confgen_mem_buf = sanitize(os.environ.get('confgen_mem_buf', "10000"))
 confgen_disk_buf = sanitize(os.environ.get('confgen_disk_buf', "10485760"))
 confgen_disk_dir = sanitize(os.environ.get('confgen_disk_dir', "/tmp"))
 confgen_local_log_path = sanitize(os.environ.get('confgen_local_log_path', ""))
+confgen_container = sanitize(os.environ.get('confgen_container', "false"))
 
 # Diagnostic output if needed
 if args.debug:
@@ -108,6 +109,7 @@ if args.debug:
     debug.write(f"confgen_disk_buf environment variable is {confgen_disk_buf}\n")
     debug.write(f"confgen_disk_dir environment variable is {confgen_disk_dir}\n")
     debug.write(f"confgen_local_log_path environment variable is {confgen_local_log_path}\n")
+    debug.write(f"confgen_container environment variable is {confgen_container}\n")
 
 # Initialize empty dicts
 country_list = {}
@@ -116,8 +118,8 @@ body_formats = {}
 destinations = ""
 
 # Determine if we're running in a container
-cgroup = Path('/proc/self/cgroup')
-running_in_container = Path('/.dockerenv').is_file() or cgroup.is_file() and 'docker' in cgroup.read_text()
+if confgen_container == "true":
+    running_in_container = True
 
 # Default address to bind to
 global_address = "0.0.0.0"
