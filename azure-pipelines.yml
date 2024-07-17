@@ -44,6 +44,11 @@ steps:
   inputs:
     script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
 
+- task: CmdLine@2
+  timeoutInMinutes: 5
+  inputs:
+    script: 'podman build -f $(Build.SourcesDirectory)/Dockerfile -t $(imageName):$(Build.BuildId) --build-arg RPM=$(RPM) $(Build.SourcesDirectory)'
+
 - task: Bash@3
   displayName: Build Container Image for syslogng-docker
   timeoutInMinutes: 5
