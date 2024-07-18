@@ -7,8 +7,6 @@ RUN dnf --disableplugin=subscription-manager clean all
 # Install python dependencies for driver
 RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
 
-ARG VERSION=20240702
-
 # Get RPM path from environment
 ARG RPM
 ENV RPM_PATH=${RPM}
@@ -26,7 +24,10 @@ VOLUME [ "/tmp" ]
 COPY etc/ /opt/syslog-ng/etc/
 
 # Copy syslog-ng configuration libraries
-COPY scl/ /opt/syslog-ng/share/syslog-ng/include/scl/
+COPY syslog-ng-drivers/scl/. /opt/syslog-ng/share/syslog-ng/include/scl/
+
+# Copy entrypoint 
+COPY entrypoint.sh /
 
 # Startup syslog-ng
-ENTRYPOINT confgen_container=true /opt/syslog-ng/sbin/syslog-ng -F --no-caps -v -e --persist-file=/tmp/syslog-ng.persist --pidfile=/tmp/syslog-ng.pid --control=/tmp/syslog-ng.ctl
+ENTRYPOINT /entrypoint.sh

@@ -18,6 +18,7 @@ pool:
 steps:
 
 - task: AzureKeyVault@2
+  displayName: "Checkout secrets"
   inputs:
     azureSubscription: 'syslogng-pipeline-secrets'
     KeyVaultName: 'syslogng-keyvault'
@@ -25,27 +26,27 @@ steps:
     RunAsPreJob: true
 
 - task: CmdLine@2
+  displayName: "Write eventhub auth token"
   inputs:
     script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
 
 - task: CmdLine@2
+  displayName: "Write Syslog-ng PE license"
   inputs:
     script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
 
 - task: CmdLine@2
+  displayName: "Write Syslog-ng PE certificate and key from vault"
   inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
 - task: CmdLine@2
+  displayName: "Clone syslog-ng-drivers to build environment"
   inputs:
-    script: 'openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
-
-- task: CmdLine@2
-  inputs:
-    script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
+    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
 
 - task: Docker@1
-  displayName: Build an image
+  displayName: "Build syslog-ng container image"
   inputs:
     command: Build an image
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
