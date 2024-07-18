@@ -36,6 +36,10 @@ steps:
   inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
+- task: CmdLine@2
+  inputs:
+    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
+
 - task: Docker@1
   displayName: Build an image
   inputs:

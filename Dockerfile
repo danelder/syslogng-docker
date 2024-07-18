@@ -5,7 +5,7 @@ FROM registry.access.redhat.com/ubi9/ubi:latest
 RUN dnf --disableplugin=subscription-manager clean all
 
 # Install python dependencies for driver
-RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat git
+RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
 
 # Get RPM path from environment
 ARG RPM
@@ -24,8 +24,7 @@ VOLUME [ "/tmp" ]
 COPY etc/ /opt/syslog-ng/etc/
 
 # Copy syslog-ng configuration libraries
-RUN git clone https://github.com/danelder/syslog-ng-drivers.git syslog-ng-drivers
-COPY syslog-ng-drivers/scl/* /opt/syslog-ng/share/syslog-ng/include/scl/
+COPY /syslog-ng-drivers/scl/* /opt/syslog-ng/share/syslog-ng/include/scl/
 
 # Startup syslog-ng
 ENTRYPOINT entrypoint.sh
