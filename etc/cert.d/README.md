@@ -1,3 +1,3 @@
 ### Placeholder
 
-Certificate and key will be deployed from Azure key vault
+Copy a valid certificate.crt and certificate.key to this directory or else use an external process to provision certs (e.g., build pipeline)
