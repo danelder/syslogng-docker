@@ -17,6 +17,10 @@ ENV confgen_container=true
 # Install syslog-ng
 RUN rpm -Uvh ${RPM_PATH}
 
+# Install required Python packages for additional drivers
+RUN /opt/syslog-ng/bin/python3 -m pip install boto3
+RUN /opt/syslog-ng/bin/python3 -m pip install --upgrade certifi
+
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
 
