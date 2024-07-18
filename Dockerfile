@@ -30,4 +30,4 @@ COPY /syslog-ng-drivers/scl/* /opt/syslog-ng/share/syslog-ng/include/scl/
 COPY entrypoint.sh /
 
 # Startup syslog-ng
-ENTRYPOINT entrypoint.sh
+ENTRYPOINT /entrypoint.sh
