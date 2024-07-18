@@ -5,7 +5,7 @@ FROM registry.access.redhat.com/ubi9/ubi:latest
 RUN dnf --disableplugin=subscription-manager clean all
 
 # Install python dependencies for driver
-RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat
+RUN dnf install --disableplugin=subscription-manager -y python3-netifaces libnsl2 libxcrypt-compat git
 
 # Get RPM path from environment
 ARG RPM
