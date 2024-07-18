@@ -50,7 +50,7 @@ steps:
   inputs:
     command: Build an image
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName) --build-arg RPM=$(RPM)'
+    arguments: '-t $(imageName) --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
   env:
     RPM: $(RPM)
 
