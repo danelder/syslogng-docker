@@ -36,22 +36,6 @@ steps:
   inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
-- task: CmdLine@2
-  inputs:
-    script: 'openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
-
-- task: CmdLine@2
-  inputs:
-    script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
-
-- task: CmdLine@2
-  inputs:
-    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
-
-- task: CmdLine@2
-  inputs:
-    script: 'mv $(Build.SourcesDirectory)/syslog-ng-drivers/scl $(Build.SourcesDirectory)/'
-
 - task: Docker@1
   displayName: Build an image
   inputs:
