@@ -24,7 +24,7 @@ VOLUME [ "/tmp" ]
 COPY etc/ /opt/syslog-ng/etc/
 
 # Copy syslog-ng configuration libraries
-COPY syslog-ng-drivers/scl/* /opt/syslog-ng/share/syslog-ng/include/scl/
+COPY syslog-ng-drivers/scl/. /opt/syslog-ng/share/syslog-ng/include/scl/
 
 # Copy entrypoint 
 COPY entrypoint.sh /
