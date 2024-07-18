@@ -46,7 +46,11 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/'
+    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
+
+- task: CmdLine@2
+  inputs:
+    script: 'mv $(Build.SourcesDirectory)/syslog-ng-drivers/scl $(Build.SourcesDirectory)/'
 
 - task: Docker@1
   displayName: Build an image
