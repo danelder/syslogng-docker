@@ -21,13 +21,15 @@ RUN rpm -Uvh ${RPM_PATH}
 RUN /opt/syslog-ng/bin/python3 -m pip install boto3
 RUN /opt/syslog-ng/bin/python3 -m pip install websocket-client
 RUN /opt/syslog-ng/bin/python3 -m pip install pytz
+RUN /opt/syslog-ng/bin/python3 -m pip install py-zabbix
 RUN /opt/syslog-ng/bin/python3 -m pip install --upgrade certifi
 
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
 
 # Ensure no caching of content beyond this point
-ARG CACHEBUST=1
+ARG CACHEBUST
+ENV CACHE_BUST=${CACHEBUST}
 
 # Copy syslog-ng configuration
 COPY etc/ /opt/syslog-ng/etc/
