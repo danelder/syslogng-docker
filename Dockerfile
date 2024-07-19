@@ -28,7 +28,8 @@ RUN /opt/syslog-ng/bin/python3 -m pip install --upgrade certifi
 VOLUME [ "/tmp" ]
 
 # Ensure no caching of content beyond this point
-ARG CACHEBUST=1
+ARG CACHEBUST
+ENV CACHE_BUST=${CACHEBUST}
 
 # Copy syslog-ng configuration
 COPY etc/ /opt/syslog-ng/etc/
