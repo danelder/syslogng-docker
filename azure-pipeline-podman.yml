@@ -18,7 +18,6 @@ pool:
 steps:
 
 - task: AzureKeyVault@2
-  displayName: "Checkout secrets"
   inputs:
     azureSubscription: 'syslogng-pipeline-secrets'
     KeyVaultName: 'syslogng-keyvault'
@@ -26,35 +25,34 @@ steps:
     RunAsPreJob: true
 
 - task: CmdLine@2
-  displayName: "Write eventhub auth token"
   inputs:
     script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
 
 - task: CmdLine@2
-  displayName: "Write Syslog-ng PE license"
   inputs:
     script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
 
 - task: CmdLine@2
-  displayName: "Write Syslog-ng PE certificate and key from vault"
   inputs:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
 - task: CmdLine@2
-  displayName: "Clone syslog-ng-drivers to build environment"
   inputs:
-    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
+    script: 'openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt'
 
-- task: Docker@1
-  displayName: "Build syslog-ng container image"
+- task: CmdLine@2
   inputs:
-    command: Build an image
-    dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName):$(Build.BuildId) --build-arg RPM=$(RPM)'
+    script: 'openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key'
 
-  env:
-    RPM: $(RPM)
+- task: CmdLine@2
+  timeoutInMinutes: 5
+  inputs:
+    script: 'podman build -f $(Build.SourcesDirectory)/Dockerfile -t $(imageName):$(Build.BuildId) --build-arg RPM=$(RPM) $(Build.SourcesDirectory)'
 
-#- task: CmdLine@2
-#  inputs:
-#    script: 'docker push localhost:8080/admin/syslogng/latest'
+- task: Bash@3
+  displayName: Build Container Image for syslogng-docker
+  timeoutInMinutes: 5
+  inputs:
+    targetType: inline
+    script: |
+      podman build -f $(Build.SourcesDirectory)/Dockerfile -t $(imageName):$(Build.BuildId) --build-arg RPM=$(RPM) $(Build.SourcesDirectory)
