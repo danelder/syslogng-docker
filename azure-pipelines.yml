@@ -60,7 +60,7 @@ steps:
   inputs:
     command: push
     containerRegistry: quay
-    repository: syslogng
+    repository: localhost/syslogng
     tags: latest
     dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
     
