@@ -55,6 +55,11 @@ steps:
   env:
     RPM: $(RPM)
 
+- task: oc-cmd@3
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshift-local'
+    cmd: 'whoami'
 #- task: CmdLine@2
 #  inputs:
 #    script: 'docker push localhost:8080/admin/syslogng/latest'
