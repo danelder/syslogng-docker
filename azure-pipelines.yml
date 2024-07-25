@@ -60,9 +60,8 @@ steps:
   inputs:
     command: push
     containerRegistry: quay
-    repository: localhost/syslogng
+    repository: admin/syslogng
     tags: latest
-    dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
     
 #- task: Docker@2
 #  displayName: "Build and Push container image"
