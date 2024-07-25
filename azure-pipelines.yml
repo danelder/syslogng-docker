@@ -59,10 +59,10 @@ steps:
   displayName: "Push syslog-ng container image to registry"
   inputs:
     command: push
-    containerRegistry: openshift-registry
+    containerRegistry: quay
     repository: syslogng
     tags: latest
-#    dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
+    dockerFile: '$(Build.SourcesDirectory)/Dockerfile'
     
 #- task: Docker@2
 #  displayName: "Build and Push container image"
