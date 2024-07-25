@@ -55,7 +55,17 @@ steps:
   env:
     RPM: $(RPM)
 
+- task: Docker@2
+  displayName: "Build and Push container image"
+  inputs:
+   containerRegistry: 'openshift-registry'
+   repository: 'syslogng-dev/docker'
+   command: buildAndPush
+   Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+   arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+
 - task: oc-cmd@3
+  displayName: "Push image to OpenShift"
   inputs:
     connectionType: 'OpenShift Connection Service'
     openshiftService: 'openshift-local'
