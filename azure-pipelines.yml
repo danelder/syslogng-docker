@@ -58,7 +58,7 @@ steps:
 - task: Docker@2
   displayName: "Push syslog-ng container image to registry"
   inputs:
-    command: Push an image
+    command: push
     containerRegistry: openshift-registry
     repository: syslogng
     tags: latest
