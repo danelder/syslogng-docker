@@ -45,10 +45,11 @@ steps:
   inputs:
     script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
 
-- task: Docker@1
+- task: Docker@2
   displayName: "Build syslog-ng container image"
   inputs:
-    command: Build an image
+    command: build
+    containerRegistry: quay
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
 
