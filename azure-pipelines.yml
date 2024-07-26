@@ -49,9 +49,9 @@ steps:
   inputs:
     command: build
     containerRegistry: quay
-    repository: admin/syslogng
+    repository: $(repository)
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName):$(tag.BuildId) -t $(imageName):latest -t quay.io/dan_elder/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+    arguments: '-t quay.io/dan_elder/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
   env:
     RPM: $(RPM)
 
