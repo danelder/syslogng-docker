@@ -52,7 +52,7 @@ steps:
     containerRegistry: quay
     repository: admin/syslogng
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest -t delder-laptop.theelderfamily.org:8080/admin/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+    arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest -t delder-laptop.theelderfamily.org:8081/admin/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
   env:
     RPM: $(RPM)
 
