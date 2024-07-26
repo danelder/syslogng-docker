@@ -8,8 +8,8 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  imageName: syslogng
-  repository: dan_elder/syslogng
+  imageName: 'syslogng'
+  repository: 'dan_elder/syslogng'
 
 pool: 
   name: lab
