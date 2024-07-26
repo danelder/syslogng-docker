@@ -68,7 +68,7 @@ steps:
   inputs:
     command: push
     containerRegistry: quay
-    repository: localhost/syslogng
+    repository: admin/syslogng
     tags: latest
     
 #- task: Docker@2
