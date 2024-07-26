@@ -70,22 +70,5 @@ steps:
     containerRegistry: quay
     repository: dan_elder/syslogng
     tags: latest
-    
-#- task: Docker@2
-#  displayName: "Build and Push container image"
-#  inputs:
-#   containerRegistry: 'openshift-registry'
-#   repository: 'syslog-ng-dev/syslogng'
-#   command: buildAndPush
-#   Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-#   arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
 
-#- task: oc-cmd@3
-#  displayName: "Push image to OpenShift"
-#  inputs:
-#    connectionType: 'OpenShift Connection Service'
-#    openshiftService: 'openshift-local'
-#    cmd: 'whoami'
-#- task: CmdLine@2
-#  inputs:
-#    script: 'docker push localhost:8080/admin/syslogng/latest'
+
