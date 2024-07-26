@@ -50,6 +50,7 @@ steps:
   inputs:
     command: build
     containerRegistry: quay
+    repository: admin/syslogng
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
 
@@ -60,6 +61,7 @@ steps:
   displayName: Quay Login
   inputs:
     command: login
+    repository: admin/syslogng
     containerRegistry: quay
 
 - task: Docker@2
