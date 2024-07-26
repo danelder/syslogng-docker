@@ -1,6 +1,4 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# Docker image build, push, and deployment
 
 trigger:
 - main
@@ -10,7 +8,9 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  imageName: syslogng
+  imageName: 'syslogng'
+  repository: 'dan_elder/syslogng'
+  registry: 'quay.io/dan_elder'
 
 pool: 
   name: lab
@@ -50,9 +50,9 @@ steps:
   inputs:
     command: build
     containerRegistry: quay
-    repository: admin/syslogng
+    repository: $(repository)
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest -t delder-laptop.theelderfamily.org:8081/admin/syslogng:latest -t quay.io/dan_elder/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+    arguments: '-t $(registry)/$(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
   env:
     RPM: $(RPM)
 
@@ -60,7 +60,7 @@ steps:
   displayName: Quay Login
   inputs:
     command: login
-    repository: dan_elder/syslogng
+    repository: $(repository)
     containerRegistry: quay
 
 - task: Docker@2
@@ -68,7 +68,7 @@ steps:
   inputs:
     command: push
     containerRegistry: quay
-    repository: dan_elder/syslogng
+    repository: $(repository)
     tags: latest
 
 
