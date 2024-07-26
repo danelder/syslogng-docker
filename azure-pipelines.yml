@@ -52,7 +52,7 @@ steps:
     containerRegistry: quay
     repository: admin/syslogng
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-    arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest -t delder-laptop.theelderfamily.org:8081/admin/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+    arguments: '-t $(imageName):$(Build.BuildId) -t $(imageName):latest -t delder-laptop.theelderfamily.org:8081/admin/syslogng:latest -t quay.io/dan_elder/syslogng:latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
   env:
     RPM: $(RPM)
 
@@ -60,7 +60,7 @@ steps:
   displayName: Quay Login
   inputs:
     command: login
-    repository: admin/syslogng
+    repository: dan_elder/syslogng
     containerRegistry: quay
 
 - task: Docker@2
@@ -68,7 +68,7 @@ steps:
   inputs:
     command: push
     containerRegistry: quay
-    repository: admin/syslogng
+    repository: dan_elder/syslogng
     tags: latest
     
 #- task: Docker@2
