@@ -15,61 +15,73 @@ variables:
 pool: 
   name: lab
 
-jobs:
-- job: KeyVault
-  steps:
-  - task: AzureKeyVault@2
-    displayName: "Checkout secrets"
-    inputs:
-      azureSubscription: 'syslogng-pipeline-secrets'
-      KeyVaultName: 'syslogng-keyvault'
-      SecretsFilter: '*'
-      RunAsPreJob: true
+stages:
+  - stage: Secrets
+    jobs:
+    - job: KeyVault
+      steps:
+      - task: AzureKeyVault@2
+        displayName: "Checkout secrets"
+        inputs:
+          azureSubscription: 'syslogng-pipeline-secrets'
+          KeyVaultName: 'syslogng-keyvault'
+          SecretsFilter: '*'
+          RunAsPreJob: true
 
-  - task: CmdLine@2
-    displayName: "Write eventhub auth token"
-    inputs:
-      script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
+    - job: AuthToken
+      steps:
+      - task: CmdLine@2
+        displayName: "Write eventhub auth token"
+        inputs:
+          script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
 
-  - task: CmdLine@2
-    displayName: "Write Syslog-ng PE license"
-    inputs:
-      script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
+    - job: License
+      steps:
+      - task: CmdLine@2
+        displayName: "Write Syslog-ng PE license"
+        inputs:
+          script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
 
-  - task: CmdLine@2
-    displayName: "Write Syslog-ng PE certificate and key from vault"
-    inputs:
-      script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
+    - job: PEM
+      steps:
+      - task: CmdLine@2
+        displayName: "Write Syslog-ng PE certificate and key from vault"
+        inputs:
+          script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
-- job: Prep
-  steps:
-  - task: CmdLine@2
-    displayName: "Clone syslog-ng-drivers to build environment"
-    inputs:
-      script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
+  - stage: Prep
+    jobs:
+    - job: Prep
+      steps:
+      - task: CmdLine@2
+        displayName: "Clone syslog-ng-drivers to build environment"
+        inputs:
+          script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
 
-  - task: CmdLine@2
-    displayName: "Extract cert and key from combined PEM if needed"
-    inputs:
-      script: 'if [ -e $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.key ; fi'
+      - task: CmdLine@2
+        displayName: "Extract cert and key from combined PEM if needed"
+        inputs:
+          script: 'if [ -e $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.key ; fi'
 
-- job: Build
-  steps: 
-  - task: Docker@2
-    displayName: "Build syslog-ng container image"
-    inputs:
-      command: build
-      containerRegistry: quay
-      repository: $(repository)
-      dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-      arguments: '-t $(registry)/$(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
-    env:
-      RPM: $(RPM)
+  - stage: Build
+    jobs:
+    - job: Build
+      steps: 
+      - task: Docker@2
+        displayName: "Build syslog-ng container image"
+        inputs:
+          command: build
+          containerRegistry: quay
+          repository: $(repository)
+          dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+          arguments: '-t $(registry)/$(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+        env:
+          RPM: $(RPM)
 
-  - task: Docker@2
-    displayName: "Push syslog-ng container image to registry"
-    inputs:
-      command: push
-      containerRegistry: quay
-      repository: $(repository)
-      tags: latest
+      - task: Docker@2
+        displayName: "Push syslog-ng container image to registry"
+        inputs:
+          command: push
+          containerRegistry: quay
+          repository: $(repository)
+          tags: latest
