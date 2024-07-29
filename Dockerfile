@@ -37,8 +37,5 @@ COPY etc/ /opt/syslog-ng/etc/
 # Copy syslog-ng configuration libraries
 COPY syslog-ng-drivers/scl/. /opt/syslog-ng/share/syslog-ng/include/scl/
 
-# Copy entrypoint 
-COPY entrypoint.sh /
-
 # Startup syslog-ng
 ENTRYPOINT confgen_container=true /opt/syslog-ng/sbin/syslog-ng -F --no-caps -v -e --persist-file=/tmp/syslog-ng.persist --pidfile=/tmp/syslog-ng.pid --control=/tmp/syslog-ng.ctl
