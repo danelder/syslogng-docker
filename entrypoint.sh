@@ -3,6 +3,10 @@
 # We are running in a container
 confgen_container=true
 
+# Debug information
+whoami
+ls -l /opt/syslog-ng/etc/
+
 # If there's a combined pem we need to split it into a cert and key for syslog-ng
 if [ -e /opt/syslog-ng/etc/cert.d/combined.pem ]; then
     openssl x509 -in /opt/syslog-ng/etc/cert.d/combined.pem -out /opt/syslog-ng/etc/cert.d/certificate.crt
