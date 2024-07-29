@@ -28,6 +28,8 @@ stages:
           SecretsFilter: '*'
           RunAsPreJob: true
 
+  - stage: Tokens
+    jobs:
     - job: AuthToken
       steps:
       - task: CmdLine@2
