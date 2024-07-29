@@ -1,7 +1,7 @@
 # Deploy container image to OpenShift
 
 pool:
-  vmImage: lab
+  name: lab
 
 steps:
 - task: oc-cmd@3
