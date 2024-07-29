@@ -45,6 +45,11 @@ steps:
   inputs:
     script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
 
+- task: CmdLine@2
+  displayName: "Extract cert and key from combined PEM if needed"
+  inputs:
+   script: 'if [ -e $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.key ; fi'
+
 - task: Docker@2
   displayName: "Build syslog-ng container image"
   inputs:
