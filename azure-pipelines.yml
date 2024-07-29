@@ -71,4 +71,9 @@ steps:
     repository: $(repository)
     tags: latest
 
-
+- task: oc-cmd@3
+  displayName: OpenShift whoami
+  inputs:
+    connectionType: 'OpenShift Connection Service'
+    openshiftService: 'openshift-sandbox'
+    cmd: 'whoami'
