@@ -41,4 +41,4 @@ COPY syslog-ng-drivers/scl/. /opt/syslog-ng/share/syslog-ng/include/scl/
 COPY entrypoint.sh /
 
 # Startup syslog-ng
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT confgen_container=true /opt/syslog-ng/sbin/syslog-ng -F --no-caps -v -e --persist-file=/tmp/syslog-ng.persist --pidfile=/tmp/syslog-ng.pid --control=/tmp/syslog-ng.ctl
