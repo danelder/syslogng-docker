@@ -43,7 +43,7 @@ steps:
 - task: CmdLine@2
   displayName: "Extract cert and key from combined PEM if needed"
   inputs:
-    script: 'if [ -e $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/opt/syslog-ng/etc/cert.d/certificate.key ; fi'
+    script: 'if [ -e $(Build.SourcesDirectory)/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key ; fi'
 
 - task: CmdLine@2
   displayName: "Clone syslog-ng-drivers to build environment"
