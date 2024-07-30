@@ -5,8 +5,8 @@ pool:
 
 steps:
 - task: oc-cmd@3
-  displayName: OpenShift whoami
+  displayName: OpenShift Deploy
   inputs:
     connectionType: 'OpenShift Connection Service'
     openshiftService: 'openshift-sandbox'
-    cmd: 'whoami'
+    cmd: 'oc new-app --image=quay.io/dan_elder/syslogng --name=syslogng'
