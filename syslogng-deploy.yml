@@ -1,0 +1,42 @@
+kind: "DeploymentConfig"
+apiVersion: "v1"
+metadata:
+  name: "logingestion"
+spec:
+  template: 
+    metadata:
+      labels:
+        name: "logingestion"
+    spec:
+      containers:
+        - name: "syslogng"
+          image: "quay.io/dan_elder/syslogng"
+          ports:
+            - containerPort: 7024
+              protocol: "TCP"
+            - containerPort: 7025
+              protocol: "TCP"
+            - containerPort: 7026
+              protocol: "TCP"
+          volumeMounts:
+          - mountPath: /tmp
+            name: syslogng-tmp
+        volumes:
+        - emptyDir: {}
+          name: syslogng-tmp
+  replicas: 1 
+  triggers:
+    - type: "ConfigChange" 
+    - type: "ImageChange" 
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - "syslogng"
+        from:
+          kind: "ImageStreamTag"
+          name: "syslogng:latest"
+  strategy: 
+    type: "Rolling"
+  paused: false 
+  revisionHistoryLimit: 2 
+  minReadySeconds: 0 
