@@ -62,13 +62,6 @@ steps:
     RPM: $(RPM)
 
 - task: Docker@2
-  displayName: Quay Login
-  inputs:
-    command: login
-    repository: $(repository)
-    containerRegistry: quay
-
-- task: Docker@2
   displayName: "Push syslog-ng container image to registry"
   inputs:
     command: push
