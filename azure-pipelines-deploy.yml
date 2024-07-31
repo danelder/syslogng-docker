@@ -18,12 +18,12 @@ steps:
 #    openshiftService: 'openshift-sandbox'
 #    cmd: 'oc apply -f $(Build.SourcesDirectory)/route.yml'
 
-- task: oc-cmd@3
-  displayName: OpenShift service.yaml
-  inputs:
-    connectionType: OpenShift Connection Service
-    openshiftService: 'openshift-sandbox'
-    cmd: 'oc apply -f $(Build.SourcesDirectory)/service.yml'
+#- task: oc-cmd@3
+#  displayName: OpenShift service.yaml
+#  inputs:
+#    connectionType: OpenShift Connection Service
+#    openshiftService: 'openshift-sandbox'
+#    cmd: 'oc apply -f $(Build.SourcesDirectory)/service.yml'
 
 #- task: oc-cmd@3
 #  displayName: OpenShift Deploy
