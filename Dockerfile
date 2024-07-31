@@ -24,6 +24,11 @@ RUN /opt/syslog-ng/bin/python3 -m pip install pytz
 RUN /opt/syslog-ng/bin/python3 -m pip install py-zabbix
 RUN /opt/syslog-ng/bin/python3 -m pip install --upgrade certifi
 
+# Remove java dependent drivers to disable warnings
+RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/elasticsearch
+RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/hdfs
+RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/kafka
+
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
 
@@ -37,8 +42,5 @@ COPY etc/ /opt/syslog-ng/etc/
 # Copy syslog-ng configuration libraries
 COPY syslog-ng-drivers/scl/. /opt/syslog-ng/share/syslog-ng/include/scl/
 
-# Copy entrypoint 
-COPY entrypoint.sh /
-
 # Startup syslog-ng
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT confgen_container=true /opt/syslog-ng/sbin/syslog-ng -F --no-caps -v -e --persist-file=/tmp/syslog-ng.persist --pidfile=/tmp/syslog-ng.pid --control=/tmp/syslog-ng.ctl

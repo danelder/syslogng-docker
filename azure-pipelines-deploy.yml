@@ -1,0 +1,33 @@
+# Deploy container image to OpenShift
+
+pool:
+  name: lab
+
+steps:
+- task: oc-cmd@3
+  displayName: OpenShift deploy.yaml
+  inputs:
+    connectionType: OpenShift Connection Service
+    openshiftService: 'openshift-sandbox'
+    cmd: 'oc apply -f $(Build.SourcesDirectory)/syslogng-deploy.yml'
+
+#- task: oc-cmd@3
+#  displayName: OpenShift route.yaml
+#  inputs:
+#    connectionType: OpenShift Connection Service
+#    openshiftService: 'openshift-sandbox'
+#    cmd: 'oc apply -f $(Build.SourcesDirectory)/route.yml'
+
+#- task: oc-cmd@3
+#  displayName: OpenShift service.yaml
+#  inputs:
+#    connectionType: OpenShift Connection Service
+#    openshiftService: 'openshift-sandbox'
+#    cmd: 'oc apply -f $(Build.SourcesDirectory)/service.yml'
+
+#- task: oc-cmd@3
+#  displayName: OpenShift Deploy
+#  inputs:
+#    connectionType: 'OpenShift Connection Service'
+#    openshiftService: 'openshift-sandbox'
+#    cmd: 'oc new-app --image=quay.io/dan_elder/syslogng --name=syslogng'

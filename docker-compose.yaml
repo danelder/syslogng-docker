@@ -1,9 +1,0 @@
-services:
-  frontend:
-    image: syslogng-docker:latest
-    platform: linux/amd64
-    container_name: syslogng-docker
-    volumes:
-      - tmp:/tmp
-volumes:
-  tmp:

@@ -1,0 +1,33 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: syslog-ng-7024
+spec:
+  port:
+    targetPort: 7024
+  to:
+    kind: Service
+    name: syslog-ng-7024
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: syslog-ng-7025
+spec:
+  port:
+    targetPort: 7025
+  to:
+    kind: Service
+    name: syslog-ng-7025
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: syslogng-7026
+spec:
+  port:
+    targetPort: 7026
+  to:
+    kind: Service
+    name: syslog-ng-7026
+

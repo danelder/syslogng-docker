@@ -41,11 +41,16 @@ steps:
     script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
 - task: CmdLine@2
+  displayName: "Extract cert and key from combined PEM if needed"
+  inputs:
+    script: 'if [ -e $(Build.SourcesDirectory)/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key ; fi'
+
+- task: CmdLine@2
   displayName: "Clone syslog-ng-drivers to build environment"
   inputs:
     script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
 
-- task: Docker@2
+- task: Docker@2.240.2
   displayName: "Build syslog-ng container image"
   inputs:
     command: build
@@ -56,14 +61,7 @@ steps:
   env:
     RPM: $(RPM)
 
-- task: Docker@2
-  displayName: Quay Login
-  inputs:
-    command: login
-    repository: $(repository)
-    containerRegistry: quay
-
-- task: Docker@2
+- task: Docker@2.240.2
   displayName: "Push syslog-ng container image to registry"
   inputs:
     command: push
