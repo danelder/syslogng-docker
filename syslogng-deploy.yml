@@ -27,6 +27,8 @@ spec:
             command:
               - /opt/syslog-ng/sbin/syslog-ng-ctl
               - healthcheck
+              - -c
+              - /tmp/syslog-ng.ctl
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
