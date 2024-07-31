@@ -17,5 +17,16 @@ spec:
         image: quay.io/dan_elder/syslogng:latest
         ports:
         - containerPort: 7024
+          name: syslog-ng-7024
         - containerPort: 7025
+          name: syslog-ng-7025
         - containerPort: 7026
+          name: syslog-ng-7026
+        livenessProbe:
+          exec:
+            command:
+              - /opt/syslog-ng/sbin/syslog-ng-ctl
+              - healthcheck
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 10
