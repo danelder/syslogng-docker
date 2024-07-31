@@ -28,6 +28,7 @@ RUN /opt/syslog-ng/bin/python3 -m pip install --upgrade certifi
 RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/elasticsearch
 RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/hdfs
 RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/kafka
+RUN rm -f /opt/syslog-ng/lib/syslog-ng/libmod-java.*
 
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
