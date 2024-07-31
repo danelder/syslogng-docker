@@ -24,6 +24,11 @@ RUN /opt/syslog-ng/bin/python3 -m pip install pytz
 RUN /opt/syslog-ng/bin/python3 -m pip install py-zabbix
 RUN /opt/syslog-ng/bin/python3 -m pip install --upgrade certifi
 
+# Remove java dependent drivers to disable warnings
+RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/elasticsearch
+RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/hdfs
+RUN rm -Rf /opt/syslog-ng/share/syslog-ng/include/scl/kafka
+
 # Cache volume for disk buffer, state, and debug output
 VOLUME [ "/tmp" ]
 
