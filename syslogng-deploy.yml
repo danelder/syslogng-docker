@@ -6,11 +6,11 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: syslog-ng
+      run: syslog-ng
   template:
     metadata:
       labels:
-        app: syslog-ng
+        run: syslog-ng
     spec:
       containers:
       - name: syslogng
@@ -36,10 +36,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: syslog-ng-ingress
+  name: syslog-ng
+  labels:
+    run: syslog-ng
 spec:
   selector:
-    name: syslog-ng
+    run: syslog-ng
   ports:
     - name: syslog-ng-7024
       protocol: TCP
