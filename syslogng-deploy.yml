@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: syslogng
+  name: syslog-ng
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: syslogng
+      app: syslog-ng
   template:
     metadata:
       labels:
-        app: syslogng
+        app: syslog-ng
     spec:
       containers:
       - name: syslogng
