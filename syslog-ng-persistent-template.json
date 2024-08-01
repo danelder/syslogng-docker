@@ -1,0 +1,245 @@
+{
+	"kind": "Template",
+	"apiVersion": "template.openshift.io/v1",
+	"metadata": {
+		"name": "syslog-ng-persistent",
+		"creationTimestamp": null,
+		"annotations": {
+			"description": "Containerized Syslog-NG PE, see https://github.com/danelder/syslogng-docker.",
+			"iconClass": "icon-openshift",
+			"openshift.io/display-name": "Syslog-NG",
+			"openshift.io/documentation-url": "https://github.com/danelder/syslogng-docker",
+			"openshift.io/long-description": "Containerized Syslog-NG.  The runtime files and disk cache/queue files are stored on persistent storage.",
+			"tags": "logging,syslog-ng"
+		}
+	},
+	"message": "Here we go!",
+	"objects": [
+		{
+			"apiVersion": "v1",
+			"kind": "Secret",
+			"metadata": {
+				"annotations": {
+					"template.openshift.io/expose-database_name": "{.data['database-name']}",
+					"template.openshift.io/expose-password": "{.data['database-password']}",
+					"template.openshift.io/expose-username": "{.data['database-user']}"
+				},
+				"name": "${DATABASE_SERVICE_NAME}"
+			},
+			"stringData": {
+				"database-name": "${POSTGRESQL_DATABASE}",
+				"database-password": "${POSTGRESQL_PASSWORD}",
+				"database-user": "${POSTGRESQL_USER}"
+			}
+		},
+        {
+			"apiVersion": "v1",
+			"kind": "Service",
+			"metadata": {
+				"annotations": {
+					"template.openshift.io/expose-uri": "syslog://{.spec.clusterIP}:{.spec.ports[?(.name==\"syslog-ng\")].port}"
+				},
+				"name": "${SYSLOG_SERVICE_NAME}"
+			},
+			"spec": {
+				"ports": [
+					{
+						"name": "syslog-7024",
+						"nodePort": 0,
+						"port": 7024,
+						"protocol": "TCP",
+						"targetPort": 7024
+					},
+					{
+						"name": "syslog-7025",
+						"nodePort": 0,
+						"port": 7025,
+						"protocol": "TCP",
+						"targetPort": 7025
+					},
+					{
+						"name": "syslog-7026",
+						"nodePort": 0,
+						"port": 7026,
+						"protocol": "TCP",
+						"targetPort": 7026
+					}
+				],
+				"selector": {
+					"name": "${SYSLOG_SERVICE_NAME}"
+				},
+				"sessionAffinity": "None",
+				"type": "ClusterIP"
+			},
+			"status": {
+				"loadBalancer": {}
+			}
+		},
+		{
+			"apiVersion": "v1",
+			"kind": "PersistentVolumeClaim",
+			"metadata": {
+				"name": "${SYSLOG_SERVICE_NAME}"
+			},
+			"spec": {
+				"accessModes": [
+					"ReadWriteOnce"
+				],
+				"resources": {
+					"requests": {
+						"storage": "${VOLUME_CAPACITY}"
+					}
+				}
+			}
+		},
+		{
+			"apiVersion": "apps.openshift.io/v1",
+			"kind": "DeploymentConfig",
+			"metadata": {
+				"annotations": {
+					"template.alpha.openshift.io/wait-for-ready": "true"
+				},
+				"name": "${SYSLOG_SERVICE_NAME}"
+			},
+			"spec": {
+				"replicas": 1,
+				"selector": {
+					"name": "${SYSLOG_SERVICE_NAME}"
+				},
+				"strategy": {
+					"type": "Recreate"
+				},
+				"template": {
+					"metadata": {
+						"labels": {
+							"name": "${SYSLOG_SERVICE_NAME}"
+						}
+					},
+					"spec": {
+						"containers": [
+							{
+								"capabilities": {},
+								"image": "quay.io/dan_elder/syslogng",
+								"imagePullPolicy": "IfNotPresent",
+								"livenessProbe": {
+									"exec": {
+										"command": [
+											"/opt/syslog-ng/sbin/syslog-ng-ctl",
+											"healthcheck"
+										]
+									},
+									"initialDelaySeconds": 20,
+									"timeoutSeconds": 5
+								},
+								"name": "syslog-ng",
+								"ports": [
+									{
+										"containerPort": 7024,
+										"protocol": "TCP"
+									},
+									{
+										"containerPort": 7025,
+										"protocol": "TCP"
+									},
+									{
+										"containerPort": 7026,
+										"protocol": "TCP"
+									}
+                                ],
+								"readinessProbe": {
+									"exec": {
+										"command": [
+											"/opt/syslog-ng/sbin/syslog-ng-ctl",
+                                            "healthcheck"
+										]
+									},
+									"initialDelaySeconds": 10,
+									"timeoutSeconds": 5
+								},
+								"resources": {
+									"limits": {
+										"memory": "${MEMORY_LIMIT}"
+									}
+								},
+								"securityContext": {
+									"capabilities": {},
+									"privileged": false
+								},
+								"terminationMessagePath": "/dev/termination-log",
+								"volumeMounts": [
+									{
+										"mountPath": "/tmp",
+										"name": "${SYSLOG_SERVICE_NAME}-data"
+									}
+								]
+							}
+						],
+						"dnsPolicy": "ClusterFirst",
+						"restartPolicy": "Always",
+						"volumes": [
+							{
+								"name": "${SYSLOG_SERVICE_NAME}-data",
+								"persistentVolumeClaim": {
+									"claimName": "${SYSLOG_SERVICE_NAME}"
+								}
+							}
+						]
+					}
+				},
+				"triggers": [
+					{
+						"imageChangeParams": {
+							"automatic": true,
+							"containerNames": [
+								"syslogng"
+							],
+							"from": {
+								"kind": "ImageStreamTag",
+								"name": "syslogng:latest",
+								"namespace": "${NAMESPACE}"
+							},
+							"lastTriggeredImage": ""
+						},
+						"type": "ImageChange"
+					},
+					{
+						"type": "ConfigChange"
+					}
+				]
+			},
+			"status": {}
+		}
+	],
+	"parameters": [
+		{
+			"name": "SYSLOG_SERVICE_NAME",
+			"displayName": "Syslog-ng Service Name",
+			"description": "The name of the OpenShift Service exposed for syslog-ng.",
+			"value": "syslog-ng",
+			"required": true
+		},		
+        {
+			"name": "MEMORY_LIMIT",
+			"displayName": "Memory Limit",
+			"description": "Maximum amount of memory the container can use.",
+			"value": "1024Mi",
+			"required": true
+		},
+		{
+			"name": "NAMESPACE",
+			"displayName": "Namespace",
+			"description": "The OpenShift Namespace where the ImageStream resides.",
+			"value": "dan-elder-dev"
+		},
+		{
+			"name": "VOLUME_CAPACITY",
+			"displayName": "Volume Capacity",
+			"description": "Volume space available for data, e.g. 512Mi, 2Gi.",
+			"value": "1Gi",
+			"required": true
+		}
+	],
+	"labels": {
+		"template": "syslog-ng-persistent-template"
+	}
+}
