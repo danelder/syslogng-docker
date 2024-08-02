@@ -48,8 +48,10 @@ metadata:
   labels:
     run: syslog-ng
 spec:
+  type: LoadBalancer
   selector:
     run: syslog-ng
+    node-type: master
   ports:
     - name: syslog-ng-7024
       protocol: TCP
