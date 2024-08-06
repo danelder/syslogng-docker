@@ -1,0 +1,10 @@
+variables:
+  imageName: "syslog-ng-dev"
+  repository: "dan_elder/syslogng"
+  registry: "quay.io/dan_elder"
+  pool: "lab"
+  azureSubscription: "syslogng-pipeline-secrets"
+  KeyVaultName: "syslogng-keyvault"
+  containerRegistry: "quay"
+  deploy-script: "syslogng-deploy-dev.yml"
+
