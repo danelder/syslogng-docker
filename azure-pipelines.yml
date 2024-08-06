@@ -8,10 +8,11 @@ resources:
 
 variables:
 - template: 'vars/dev.yml'
-  #tag: '$(Build.BuildId)'
+- name:  tag
+  value: '$(Build.BuildId)'
 
 pool: 
-  name: 'lab'
+  name: '$(pool)'
 
 steps:
 
