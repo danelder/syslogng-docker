@@ -1,11 +1,13 @@
 variables:
-  imageName: "syslog-ng-dev"
-  repository: "dan_elder/syslogng"
-  registry: "quay.io/dan_elder"
-  pool: "lab"
-  azureSubscription: "syslogng-pipeline-secrets"
-  KeyVaultName: "syslogng-keyvault"
-  certificateSecret: "syslogng-theelderfamily-org"
-  containerRegistry: "quay"
-  deploy-script: "syslogng-deploy-dev.yml"
+  trigger: 'main'
+  imageName: 'syslog-ng-dev'
+  repository: 'dan_elder/syslogng'
+  registry: 'quay.io/dan_elder'
+  pool: 'lab'
+  azureSubscription: 'syslogng-pipeline-secrets'
+  KeyVaultName: 'syslogng-keyvault'
+  certificateSecret: 'syslogng-theelderfamily-org'
+  containerRegistry: 'quay'
+  deploy-script: 'syslogng-deploy-dev.yml'
+  openshiftService: 'openshift-sandbox-dev'
 
