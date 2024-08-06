@@ -11,7 +11,7 @@ variables:
   template: 'vars/dev.yml'
 
 pool: 
-  name: '$(pool)'
+  name: 'lab'
 
 steps:
 
