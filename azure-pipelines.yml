@@ -19,7 +19,7 @@ steps:
   displayName: "Checkout secrets"
   inputs:
     azureSubscription: ${{ variables.azureSubscription }}
-    KeyVaultName: '$(KeyVaultName)'
+    KeyVaultName: ${{ variables.KeyVaultName }}
     SecretsFilter: '*'
     RunAsPreJob: true
 
