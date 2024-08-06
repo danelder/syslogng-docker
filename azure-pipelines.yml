@@ -49,7 +49,7 @@ steps:
   inputs:
     script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
 
-- task: Docker@2
+- task: Docker@2.240.2
   displayName: "Build syslog-ng container image"
   inputs:
     command: build
@@ -60,7 +60,7 @@ steps:
   env:
     RPM: $(RPM)
 
-- task: Docker@2
+- task: Docker@2.240.2
   displayName: "Push syslog-ng container image to registry"
   inputs:
     command: push
