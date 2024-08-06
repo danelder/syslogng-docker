@@ -7,8 +7,8 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
-  template: 'vars/dev.yml'
+- template: 'vars/dev.yml'
+  #tag: '$(Build.BuildId)'
 
 pool: 
   name: 'lab'
