@@ -8,20 +8,18 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  imageName: 'syslogng'
-  repository: 'dan_elder/syslogng'
-  registry: 'quay.io/dan_elder'
+  template: 'vars/dev.yml'
 
 pool: 
-  name: lab
+  name: '$(pool)'
 
 steps:
 
 - task: AzureKeyVault@2
   displayName: "Checkout secrets"
   inputs:
-    azureSubscription: 'syslogng-pipeline-secrets'
-    KeyVaultName: 'syslogng-keyvault'
+    azureSubscription: ${{ variables.azureSubscription }}
+    KeyVaultName: '$(KeyVaultName)'
     SecretsFilter: '*'
     RunAsPreJob: true
 
@@ -38,7 +36,7 @@ steps:
 - task: CmdLine@2
   displayName: "Write Syslog-ng PE certificate and key from vault"
   inputs:
-    script: 'echo "$(syslogng-theelderfamily-org)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
+    script: 'echo "$(certificateSecret)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
 
 - task: CmdLine@2
   displayName: "Extract cert and key from combined PEM if needed"
@@ -54,7 +52,7 @@ steps:
   displayName: "Build syslog-ng container image"
   inputs:
     command: build
-    containerRegistry: quay
+    containerRegistry: ${{ variables.containerRegistry }}
     repository: $(repository)
     dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
     arguments: '-t $(registry)/$(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
@@ -65,8 +63,6 @@ steps:
   displayName: "Push syslog-ng container image to registry"
   inputs:
     command: push
-    containerRegistry: quay
+    containerRegistry: ${{ variables.containerRegistry }}
     repository: $(repository)
     tags: latest
-
-
