@@ -1,29 +1,18 @@
 # Deploy container image to OpenShift
 
+variables:
+- template: 'vars/dev.yml'
+
 pool:
-  name: lab
+  name: $(pool)
 
 steps:
 - task: oc-cmd@3
   displayName: OpenShift deploy.yaml
   inputs:
     connectionType: OpenShift Connection Service
-    openshiftService: 'openshift-sandbox'
-    cmd: 'oc apply -f $(Build.SourcesDirectory)/syslogng-deploy.yml'
-
-#- task: oc-cmd@3
-#  displayName: OpenShift route.yaml
-#  inputs:
-#    connectionType: OpenShift Connection Service
-#    openshiftService: 'openshift-sandbox'
-#    cmd: 'oc apply -f $(Build.SourcesDirectory)/route.yml'
-
-#- task: oc-cmd@3
-#  displayName: OpenShift service.yaml
-#  inputs:
-#    connectionType: OpenShift Connection Service
-#    openshiftService: 'openshift-sandbox'
-#    cmd: 'oc apply -f $(Build.SourcesDirectory)/service.yml'
+    openshiftService: '$(openshiftService)'
+    cmd: 'oc apply -f $(Build.SourcesDirectory)/$(deploy-script)'
 
 #- task: oc-cmd@3
 #  displayName: OpenShift Deploy
