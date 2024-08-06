@@ -26,8 +26,8 @@ steps:
 - task: AzureKeyVault@2
   displayName: "Checkout secrets"
   inputs:
-    azureSubscription: ${{ variables.azureSubscription }}
-    KeyVaultName: ${{ variables.KeyVaultName }}
+    azureSubscription: $(azureSubscription)
+    KeyVaultName: $(KeyVaultName)
     SecretsFilter: '*'
     RunAsPreJob: true
 
