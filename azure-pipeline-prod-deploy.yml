@@ -1,4 +1,4 @@
-# Deploy container image to OpenShift
+# Deploy container image to Rancher
 
 variables:
 - template: 'vars/dev.yml'
@@ -7,16 +7,10 @@ pool:
   name: $(pool)
 
 steps:
-- task: oc-cmd@3
-  displayName: OpenShift deploy.yaml
+- task: Kubernetes@1
+  displayName: kubectl
   inputs:
-    connectionType: OpenShift Connection Service
-    openshiftService: '$(openshiftService)'
-    cmd: 'oc apply -f $(Build.SourcesDirectory)/$(deploy-script)'
-
-#- task: oc-cmd@3
-#  displayName: OpenShift Deploy
-#  inputs:
-#    connectionType: 'OpenShift Connection Service'
-#    openshiftService: 'openshift-sandbox'
-#    cmd: 'oc new-app --image=quay.io/dan_elder/syslogng --name=syslogng'
+    connectionType: Kubernetes Service Connection
+    kubernetesServiceEndpoint: rancher-prod
+    namespace: 'syslog-ng'
+    command: logs
