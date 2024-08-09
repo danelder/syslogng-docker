@@ -1,0 +1,69 @@
+# Docker image build, push, and deployment
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+- template: 'vars/dev.yml'
+- name:  tag
+  value: '$(Build.BuildId)'
+
+pool: 
+  name: '$(pool)'
+
+steps:
+
+- task: AzureKeyVault@2
+  displayName: "Checkout secrets"
+  inputs:
+    azureSubscription: $(azureSubscription)
+    KeyVaultName: $(KeyVaultName)
+    SecretsFilter: '*'
+    RunAsPreJob: false
+
+- task: CmdLine@2
+  displayName: "Write eventhub auth token"
+  inputs:
+    script: 'echo $(eventhub-auth-token) > $(Build.SourcesDirectory)/etc/conf.d/eventhub-auth-token'
+
+- task: CmdLine@2
+  displayName: "Write Syslog-ng PE license"
+  inputs:
+    script: 'echo "$(license)" > $(Build.SourcesDirectory)/etc/license.txt'
+
+- task: CmdLine@2
+  displayName: "Write Syslog-ng PE certificate and key from vault"
+  inputs:
+    script: 'echo "$(certificateSecret)" > $(Build.SourcesDirectory)/etc/cert.d/combined.pem'
+
+- task: CmdLine@2
+  displayName: "Extract cert and key from combined PEM if needed"
+  inputs:
+    script: 'if [ -e $(Build.SourcesDirectory)/etc/cert.d/combined.pem ]; then openssl x509 -in $(Build.SourcesDirectory)/etc/cert.d/combined.pem -out $(Build.SourcesDirectory)/etc/cert.d/certificate.crt; openssl storeutl -keys $(Build.SourcesDirectory)/etc/cert.d/combined.pem > $(Build.SourcesDirectory)/etc/cert.d/certificate.key ; fi'
+
+- task: CmdLine@2
+  displayName: "Clone syslog-ng-drivers to build environment"
+  inputs:
+    script: 'git clone https://github.com/danelder/syslog-ng-drivers.git $(Build.SourcesDirectory)/syslog-ng-drivers'
+
+- task: Docker@2.240.2
+  displayName: "Build syslog-ng container image"
+  inputs:
+    command: build
+    containerRegistry: ${{ variables.containerRegistry }}
+    repository: $(repository)
+    dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+    arguments: '-t $(registry)/$(imageName):latest --build-arg RPM=$(RPM) --build-arg CACHEBUST=$(Build.BuildId)'
+  env:
+    RPM: $(RPM)
+
+- task: Docker@2.240.2
+  displayName: "Push syslog-ng container image to registry"
+  inputs:
+    command: push
+    containerRegistry: ${{ variables.containerRegistry }}
+    repository: $(repository)
+    tags: latest
