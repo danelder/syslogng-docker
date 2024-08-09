@@ -37,6 +37,8 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 10
+      imagePullSecrets:
+      - name: quay
       volumes:
         - name: tmp
           emptyDir: {}
