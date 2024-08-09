@@ -8,6 +8,6 @@ variables:
   KeyVaultName: 'syslogng-keyvault'
   certificateSecret: 'syslogng-theelderfamily-org'
   containerRegistry: 'quay'
-  deploy-script: 'syslogng-deploy-dev.yml'
+  deploy-script: 'syslogng-deploy-prod.yml'
   openshiftService: 'openshift-sandbox-dev'
 
