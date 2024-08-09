@@ -6,11 +6,13 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      run: syslog-ng
+      app: syslog-ng
+      #run: syslog-ng
   template:
     metadata:
       labels:
-        run: syslog-ng
+        app: syslog-ng
+        #run: syslog-ng
     spec:
       containers:
       - name: syslogng
@@ -48,11 +50,13 @@ kind: Service
 metadata:
   name: syslog-ng
   labels:
-    run: syslog-ng
+    #run: syslog-ng
+    app: syslog-ng
 spec:
-  #type: LoadBalancer
+  type: LoadBalancer
   selector:
-    run: syslog-ng
+    app: syslog-ng
+    #run: syslog-ng
     #node-type: master
   ports:
     - name: syslog-ng-7024
