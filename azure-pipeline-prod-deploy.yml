@@ -13,4 +13,6 @@ steps:
     connectionType: Kubernetes Service Connection
     kubernetesServiceEndpoint: rancher-prod
     namespace: 'syslog-ng'
-    command: logs
+    command: apply
+    useConfigurationFile: true
+    configuration: '$(Build.SourcesDirectory)/syslogng-deploy-prod.yml'
